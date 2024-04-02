@@ -1,0 +1,28 @@
+{
+  "name": "waalaxy-queue-app-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "npx ts-node index.ts",
+    "test": "tsc && jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.30",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}
