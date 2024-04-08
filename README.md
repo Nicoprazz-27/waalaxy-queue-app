@@ -8,6 +8,10 @@ The user can add actions to the queue, and every 15 seconds, the first available
 
 Adding an action to the queue doesn't require credits, but executing it does.
  
+## Prerequisites
+node >= v20.12.0
+
+npm >= 9.6.2
 
 ## Installation
 
