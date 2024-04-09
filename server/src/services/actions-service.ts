@@ -38,8 +38,13 @@ const getActions = ():Action[] =>{
     return actionsDefautValues;
 }
 
+const getAction = (actionId: string): Action|undefined => {
+    return actionsDefautValues.find(action => action.id === actionId);
+}
+
 const actionsService = {
-    getActions: getActions
+    getActions: getActions,
+    getAction: getAction
 };
 
 export default actionsService;
