@@ -23,7 +23,11 @@ npm run install-all
 
 ## Usage
 
-After the installation, to run the project, use the Node Package Manager (npm) with the 'start' command.
+After the installation, create a .ENV file within the "server" directory.
+
+Every variable present in the .ENV.example file must be included in the .ENV file along with a corresponding value.
+
+Then, to run the project, use the Node Package Manager (npm) with the 'start' command.
 
 ```
 npm run start
