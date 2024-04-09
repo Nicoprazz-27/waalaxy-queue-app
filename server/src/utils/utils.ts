@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import NodeCache from 'node-cache';
+import path from 'path';
 
 //15 minutes for the cache expiration
 const generatedNumberCache: NodeCache = new NodeCache({stdTTL: 900, checkperiod: 1});

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Action from "../models/action";
-import { generateRandomNumberWithCache } from "../utils";
+import { generateRandomNumberWithCache } from "../utils/utils";
 
 export default (req: Request, res: Response) => {
 

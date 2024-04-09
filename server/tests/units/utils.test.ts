@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import { generateRandomNumber, generateRandomNumberWithCache, getENVValue } from "../../src/utils";
+import { generateRandomNumber, generateRandomNumberWithCache, getENVValue } from "../../src/utils/utils";
 
 
 describe('Utils tests', ()=>{
