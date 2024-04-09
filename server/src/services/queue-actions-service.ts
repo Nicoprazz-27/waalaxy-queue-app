@@ -1,11 +1,20 @@
 import Action from "../models/action";
 import QueueAction from "../models/queue-action";
-import { generateUuid } from "../utils/utils";
+import { generateUuid, isDateTimeExpired } from "../utils/utils";
 
 
-const queueActions: QueueAction[] = [];
+let queueActions: QueueAction[] = [];
 
 const getQueueActions = (): QueueAction[] =>{
+  //Remove the queueActions where expirationDateTime is passed
+  const filteredQueueActions: QueueAction[] = queueActions.filter((queueAction)=>{
+    return isDateTimeExpired(queueAction.expirationDateTime);
+  });
+
+  queueActions = filteredQueueActions;
+
+  return queueActions;
+}
     return queueActions;
 }
 

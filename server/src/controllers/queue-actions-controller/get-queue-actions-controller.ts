@@ -4,6 +4,7 @@ import queueActionsService from "../../services/queue-actions-service";
 
 export default (req: Request, res: Response) => {
 
-  const queueActions :QueueAction[] = queueActionsService.getQueueActions();
+  const queueActions: QueueAction[] = queueActionsService.getQueueActions();
+
   res.send(queueActions);
 }

@@ -48,3 +48,10 @@ export const getUTCDateFormatYYYYMMDD = () :string => {
 export const generateUuid = () :string => {
     return uuidv4();
 }
+
+export const isDateTimeExpired = (datetime: string): boolean => {
+    const currentDateTime = new Date();
+    const expirationDateTime = new Date(datetime);
+    
+    return (currentDateTime >= expirationDateTime);
+}
