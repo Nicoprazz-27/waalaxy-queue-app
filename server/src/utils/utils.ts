@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import NodeCache from 'node-cache';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 //15 minutes for the cache expiration
 const generatedNumberCache: NodeCache = new NodeCache({stdTTL: 900, checkperiod: 1});
@@ -42,4 +43,8 @@ export const getUTCDateFormatYYYYMMDD = () :string => {
     const day: string = todayDate.getUTCDate().toString().padStart(2, '0');
 
     return `${year}.${month}.${day}`;
+}
+
+export const generateUuid = () :string => {
+    return uuidv4();
 }
