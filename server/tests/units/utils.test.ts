@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import { generateRandomNumber, generateRandomNumberWithCache, getENVValue } from "../../src/utils/utils";
+import { generateRandomNumber, generateRandomNumberWithCache, getENVValue, isDateTimeExpired } from "../../src/utils/utils";
 
 
 describe('Utils tests', ()=>{
@@ -68,4 +68,26 @@ describe('Utils tests', ()=>{
 
 
   });
+
+  describe('isDateTimeExpired', ()=>{
+
+    it('should return true', ()=>{
+      const utcNow = new Date().toISOString();
+      const isDateTimeExpiredResponse: boolean = isDateTimeExpired(utcNow);
+      
+      expect(isDateTimeExpiredResponse).toBe(true);
+    });
+
+    it('should return false', ()=>{
+      const date = new Date();
+      date.setUTCSeconds(date.getUTCSeconds()+10);
+      const utcNow = date.toISOString();
+      const isDateTimeExpiredResponse: boolean = isDateTimeExpired(utcNow);
+      
+      expect(isDateTimeExpiredResponse).toBe(false);
+    });
+
+  })
+
+  
 });
