@@ -29,3 +29,17 @@ export const generateRandomNumber = (min: number, max: number): number => {
     }
     return Math.random() * (max - min) + min;
 }
+
+export const getProjectPath = ():string => {
+    return path.resolve(__dirname, '..', '..');
+}
+
+export const getUTCDateFormatYYYYMMDD = () :string => {
+    const todayDate = new Date();
+
+    const year: number = todayDate.getUTCFullYear();
+    const month: string = (todayDate.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day: string = todayDate.getUTCDate().toString().padStart(2, '0');
+
+    return `${year}.${month}.${day}`;
+}
