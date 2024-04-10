@@ -8,7 +8,12 @@ describe('GET /credits', function () {
     it('should return statuscode 200', async () => {
         const response: Response = await request(app).get(urlPath);
         expect(response.status).toBe(200); 
-        console.log(response.body);
+        
+        expect(typeof response.body).toBe('object');
+        for (const key in response.body) {
+            expect(typeof key).toBe('string');
+            expect(typeof response.body[key]).toBe('number');
+        }
     });
 
 });
