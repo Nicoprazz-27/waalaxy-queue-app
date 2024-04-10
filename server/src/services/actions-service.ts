@@ -35,10 +35,6 @@ const actionsDefautValues: Action[] = [
     }
 ];
 
-const getActions = ():Action[] =>{
-  return actionsDefautValues;
-}
-
 const getActionsWithRandomCreditCost = (min: number, max: number):Action[] =>{
 
   const actionsWithCreditCost: Action[] = actionsDefautValues.map((action: Action)=>{
@@ -57,7 +53,6 @@ const getAction = (actionId: string): Action|undefined => {
 }
 
 const actionsService = {
-    getActions: getActions,
     getAction: getAction,
     getActionsWithRandomCreditCost: getActionsWithRandomCreditCost
 };
