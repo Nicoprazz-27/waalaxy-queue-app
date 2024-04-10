@@ -1,4 +1,5 @@
 import Action from "../models/action";
+import { generateRandomNumberWithCache } from "../utils/utils";
 
 
 const actionsDefautValues: Action[] = [
@@ -35,7 +36,18 @@ const actionsDefautValues: Action[] = [
 ];
 
 const getActions = ():Action[] =>{
-    return actionsDefautValues;
+  return actionsDefautValues;
+}
+
+const getActionsWithRandomCreditCost = (min: number, max: number):Action[] =>{
+
+  const actionsWithCreditCost: Action[] = actionsDefautValues.map((action: Action)=>{
+    action.creditCost = Math.round(action.maxCreditCost! * generateRandomNumberWithCache(min, max));
+    delete action.maxCreditCost;
+    return action;
+  });
+  
+  return actionsWithCreditCost;
 }
 
 const getAction = (actionId: string): Action|undefined => {
@@ -44,7 +56,8 @@ const getAction = (actionId: string): Action|undefined => {
 
 const actionsService = {
     getActions: getActions,
-    getAction: getAction
+    getAction: getAction,
+    getActionsWithRandomCreditCost: getActionsWithRandomCreditCost
 };
 
 export default actionsService;

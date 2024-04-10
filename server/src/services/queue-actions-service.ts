@@ -19,6 +19,9 @@ const addQueueAction = (actionId: string): QueueAction[] => {
     throw new Error('no action');
   }
 
+  delete actionSelected.creditCost;
+  delete actionSelected.maxCreditCost;
+
   const newQueueAction:QueueAction = {
       id: generateUuid(),
       expirationDateTime: new Date().toISOString(),
