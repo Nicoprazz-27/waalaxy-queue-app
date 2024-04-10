@@ -4,9 +4,10 @@ import app from '../../src/app';
 import Action from '../../src/models/action';
 
 describe('GET /actions', function () {
+    const urlPath = '/actions';
 
     it('should return statuscode 200', async () => {
-        const response: Response = await request(app).get('/actions');
+        const response: Response = await request(app).get(urlPath);
         expect(response.status).toBe(200); 
         response.body.forEach((action: Action) => {
             expect(action.id).toEqual(expect.any(String));
