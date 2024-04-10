@@ -1,8 +1,40 @@
 import {describe, expect, it} from '@jest/globals';
-import { generateRandomNumber, generateRandomNumberWithCache, getENVValue, isDateTimeExpired } from "../../src/utils/utils";
+import { generateRandomNumber, generateRandomNumberWithCache, generateUuid, getENVValue, getUTCDateFormatYYYYMMDD, isDateTimeExpired } from "../../src/utils/utils";
+import { isUuid } from '../helpers';
 
 
 describe('Utils tests', ()=>{
+  describe('getENVValue', ()=>{
+    it('should return the .ENV port value', ()=>{
+      const portEnv: string | undefined = getENVValue('PORT');
+      expect(portEnv).not.toBeUndefined();
+    });
+
+    it('should return undefined as value not defined in .ENV', ()=>{
+      const portEnv: string | undefined = getENVValue('EXAMPLE_VALUE_AZERTYUIOPQSD');
+      expect(portEnv).toBeUndefined();
+    });
+
+
+  });
+
+  describe('generateRandomNumberWithCache', ()=>{
+    it('should return the same number due to cache', ()=>{
+      const min: number = 7;
+      const max: number = 10;
+      const generatedNumber: number = generateRandomNumberWithCache(min, max);
+      const secondGeneratedNumber: number = generateRandomNumberWithCache(min, max);
+      expect(generatedNumber).toBe(secondGeneratedNumber);
+    });
+
+    it('should return a different number if the parameter are different', () => {
+      const firstRandomNumber: number = generateRandomNumberWithCache(7, 9);
+      const secondRandomNumber: number = generateRandomNumberWithCache(8, 10);
+
+      expect(firstRandomNumber).not.toBe(secondRandomNumber);
+    });
+  });
+
   describe('generateRandomNumber', ()=>{
     it('should generate a random number between min and max', () => {
       const min: number = 1;
@@ -38,35 +70,24 @@ describe('Utils tests', ()=>{
     });
   });
 
-  describe('generateRandomNumberWithCache', ()=>{
-    it('should return the same number due to cache', ()=>{
-      const min: number = 7;
-      const max: number = 10;
-      const generatedNumber: number = generateRandomNumberWithCache(min, max);
-      const secondGeneratedNumber: number = generateRandomNumberWithCache(min, max);
-      expect(generatedNumber).toBe(secondGeneratedNumber);
-    });
+  describe('getUTCDateFormatYYYYMMDD', ()=>{
+    it('should return a date in format YYYY.MM.DD', () => {
+      const date: Date = new Date();
+      const formatedDate = getUTCDateFormatYYYYMMDD();
 
-    it('should return a different number if the parameter are different', () => {
-      const firstRandomNumber: number = generateRandomNumberWithCache(7, 9);
-      const secondRandomNumber: number = generateRandomNumberWithCache(8, 10);
-
-      expect(firstRandomNumber).not.toBe(secondRandomNumber);
+      const [year, month, day] = formatedDate.split('.');
+      expect(year).toBe(date.getUTCFullYear().toString());
+      expect(month).toBe((date.getUTCMonth()+1).toString().padStart(2,'0'));
+      expect(day).toBe(date.getUTCDate().toString());
     });
   });
 
-  describe('getENVValue', ()=>{
-    it('should return the .ENV port value', ()=>{
-      const portEnv: string | undefined = getENVValue('PORT');
-      expect(portEnv).not.toBeUndefined();
+  describe('generateUuid', ()=>{
+    it('should return a string in uuid format', ()=>{
+      const uuid = generateUuid();
+
+      expect(isUuid(uuid)).toBe(true);
     });
-
-    it('should return undefined as value not defined in .ENV', ()=>{
-      const portEnv: string | undefined = getENVValue('EXAMPLE_VALUE_AZERTYUIOPQSD');
-      expect(portEnv).toBeUndefined();
-    });
-
-
   });
 
   describe('isDateTimeExpired', ()=>{
@@ -87,7 +108,6 @@ describe('Utils tests', ()=>{
       expect(isDateTimeExpiredResponse).toBe(false);
     });
 
-  })
+  });
 
-  
 });
