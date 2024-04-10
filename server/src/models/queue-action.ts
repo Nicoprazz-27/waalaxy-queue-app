@@ -6,7 +6,7 @@ type QueueAction = {
     action: Action;
     creditByActionAfterExpiration: {
         [key: string]: number;
-    }
+    };
 }
 
 export default QueueAction
