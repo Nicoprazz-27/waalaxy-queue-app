@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
-import Action from "../../../types/action"
-import ActionCard from "../../../components/ActionCard/ActionCard"
-import './QueueList.css'
+import ActionCard from "../../../components/ActionCard/ActionCard";
+import './QueueList.css';
+import QueueAction from "../../../types/queue-action";
 
 
-function QueueList({actions, activeActionId}: {actions: Action[], activeActionId: string|null}): JSX.Element {
+function QueueList({queueActions}: {queueActions: QueueAction[]}): JSX.Element {
 
   const [activeActionIndex, setActiveActionIndex] = useState<number>(-1);
 
   useEffect(() => {   
-    const activeActionIndexFunctionScope: number = actions.findIndex((action) => action.id === activeActionId);
+    const activeActionIndexFunctionScope: number = queueActions.findIndex((queueAction) => queueAction.expirationDateTime !== null);
     setActiveActionIndex(activeActionIndexFunctionScope);
-  }, [actions, activeActionId]);
+  }, [queueActions]);
 
 
   const subtitle = (): JSX.Element => {
     return (
       <p>
-        {actions.length === 0 ? 'Waiting for actions' : ''}
+        {queueActions.length === 0 ? 'Waiting for actions' : ''}
       </p>
     );
   }
@@ -29,10 +29,10 @@ function QueueList({actions, activeActionId}: {actions: Action[], activeActionId
         <h3 className="queue-container-subtitle">First In</h3>
         {subtitle()}
         <div>
-          {actions.map((action: Action, index: number) => ( 
+          {queueActions.map((queueAction, index) => ( 
             <ActionCard 
-              key={index} 
-              action={action} 
+              key={queueAction.id} 
+              action={queueAction.action} 
               isActive={index === activeActionIndex}
             />
           ))}
