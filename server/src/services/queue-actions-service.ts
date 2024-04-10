@@ -6,8 +6,12 @@ import actionsService from "./actions-service";
 
 let queueActions: QueueAction[] = [];
 
-const getQueueActions = (): QueueAction[] =>{
+const getActiveQueueActions = (): QueueAction[] =>{
   return removeExpiredQueueActions();
+}
+
+const getQueueActions = (): QueueAction[] =>{
+  return [... queueActions];
 }
 
 const addQueueAction = (actionId: string): QueueAction[] => {
@@ -91,6 +95,7 @@ const removeExpiredQueueActions = (): QueueAction[] => {
 }
 
 const queueActionsService = {
+    getActiveQueueActions: getActiveQueueActions,
     getQueueActions: getQueueActions,
     addQueueAction: addQueueAction
 };
