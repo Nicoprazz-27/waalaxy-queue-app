@@ -51,7 +51,9 @@ const getActionsWithRandomCreditCost = (min: number, max: number):Action[] =>{
 }
 
 const getAction = (actionId: string): Action|undefined => {
-    return actionsDefautValues.find(action => action.id === actionId);
+  const action = actionsDefautValues.find(action => action.id === actionId);
+
+  return action !== undefined ? Object.assign({}, action) : undefined;
 }
 
 const actionsService = {
