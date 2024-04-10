@@ -38,11 +38,11 @@ const actionsDefautValues: Action[] = [
 const getActionsWithRandomCreditCost = (min: number, max: number):Action[] =>{
 
   const actionsWithCreditCost: Action[] = actionsDefautValues.map((action: Action)=>{
-    action.creditCost = Math.round(action.maxCreditCost! * generateRandomNumberWithCache(min, max));
-    delete action.maxCreditCost;
-    return action;
+    const { maxCreditCost, ...newAction } = action;
+    newAction.creditCost = Math.round(maxCreditCost! * generateRandomNumberWithCache(min, max));
+    return newAction;
   });
-  
+
   return actionsWithCreditCost;
 }
 
