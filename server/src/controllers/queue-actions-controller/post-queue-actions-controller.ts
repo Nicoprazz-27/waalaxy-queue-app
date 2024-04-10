@@ -5,9 +5,9 @@ import queueActionsService from "../../services/queue-actions-service";
 export default (req: Request, res: Response) => {
 
   const { actionId } = req.body;
-
-  if(actionId === null){
-    res.send(400).send('Body parameters are missing.');
+  
+  if(actionId === undefined || typeof actionId !== 'string'){
+    res.status(400).send('Body parameters are missing.');
   }
 
   try {
