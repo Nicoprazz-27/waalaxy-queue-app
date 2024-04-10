@@ -8,6 +8,7 @@ export default (req: Request, res: Response) => {
   
   if(actionId === undefined || typeof actionId !== 'string'){
     res.status(400).send('Body parameters are missing.');
+    return;
   }
 
   try {
