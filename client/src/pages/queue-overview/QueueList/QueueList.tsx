@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ActionCard from "../../../components/ActionCard/ActionCard";
-import './QueueList.css';
 import QueueAction from "../../../types/queue-action";
 
 
