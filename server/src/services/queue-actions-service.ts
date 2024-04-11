@@ -1,10 +1,11 @@
 import Action from "../models/action";
 import QueueAction from "../models/queue-action";
-import { generateUuid, isDateTimeExpired } from "../utils/utils";
+import { generateUuid, getENVValue, isDateTimeExpired } from "../utils/utils";
 import actionsService from "./actions-service";
 
 
 let queueActions: QueueAction[] = [];
+const QUEUE_EXECUTION_TIME = parseInt(getENVValue('QUEUE_EXECUTION_TIME')!);
 
 const getActiveQueueActions = (): QueueAction[] =>{
   return removeExpiredQueueActions();
@@ -39,7 +40,7 @@ const addQueueAction = (actionId: string): QueueAction[] => {
     if(creditByAction[actionSelected.id]! > 0){
       creditByAction[actionSelected.id] = creditByAction[actionSelected.id] - 1;
       const utcNow = new Date();
-      utcNow.setUTCSeconds(utcNow.getUTCSeconds() + 15);
+      utcNow.setUTCSeconds(utcNow.getUTCSeconds() + QUEUE_EXECUTION_TIME);
       expirationDateTime = utcNow.toISOString();
     }
     
@@ -58,13 +59,13 @@ const addQueueAction = (actionId: string): QueueAction[] => {
 
         if(isDateTimeExpired(queueActions[index].expirationDateTime!)){
           const utcNow = new Date();
-          utcNow.setUTCSeconds(utcNow.getUTCSeconds() + 15);
+          utcNow.setUTCSeconds(utcNow.getUTCSeconds() + QUEUE_EXECUTION_TIME);
           expirationDateTime = utcNow.toISOString();
           break;
         }
 
         const previousExpirationDateTime = new Date(queueActions[index].expirationDateTime!);
-        previousExpirationDateTime.setUTCSeconds(previousExpirationDateTime.getUTCSeconds() + 15);
+        previousExpirationDateTime.setUTCSeconds(previousExpirationDateTime.getUTCSeconds() + QUEUE_EXECUTION_TIME);
         expirationDateTime = previousExpirationDateTime.toISOString();
         break;
       }
