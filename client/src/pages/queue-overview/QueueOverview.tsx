@@ -20,7 +20,7 @@ function QueueOverview(): JSX.Element {
 
     getRequest('/credits')
       .then((res)=>{
-        const creditsByAction = res.data;
+        const creditsByAction: { [key: string]: number; } = res.data;
         setCreditByAction(creditsByAction);
       })
       
@@ -41,7 +41,7 @@ function QueueOverview(): JSX.Element {
       if(queueActions[index].expirationDateTime !== null){
         const expirationDateTime = new Date(queueActions[index].expirationDateTime!);
         const now = new Date();
-        const delayInSeconds : number = (expirationDateTime.getTime() - now.getTime()) / 1000;
+        const delayInSeconds = (expirationDateTime.getTime() - now.getTime()) / 1000;
         
         timeOutToDeleteQueueAction = setTimeout(() => {
           setQueueActions(prevQueueActions => prevQueueActions.filter( (queueAction, i) => i !== index));
