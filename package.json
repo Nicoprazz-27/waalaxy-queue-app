@@ -1,6 +1,6 @@
 {
   "name": "waalaxy-queue-app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "scripts": {
     "start": "concurrently \"npm run start-client\" \"npm run start-server\"",
