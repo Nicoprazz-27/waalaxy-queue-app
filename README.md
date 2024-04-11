@@ -8,6 +8,10 @@ The user can add actions to the queue, and every 15 seconds, the first available
 
 Adding an action to the queue doesn't require credits, but executing it does.
  
+## Prerequisites
+node >= v20.12.0
+
+npm >= 9.6.2
 
 ## Installation
 
@@ -19,7 +23,11 @@ npm run install-all
 
 ## Usage
 
-After the installation, to run the project, use the Node Package Manager (npm) with the 'start' command.
+After the installation, create a .ENV file within the "server" directory.
+
+Every variable present in the .ENV.example file must be included in the .ENV file along with a corresponding value.
+
+Then, to run the project, use the Node Package Manager (npm) with the 'start' command.
 
 ```
 npm run start

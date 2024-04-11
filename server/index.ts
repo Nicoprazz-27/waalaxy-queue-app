@@ -1,4 +1,4 @@
-import { getENVValue } from './src/utils';
+import { getENVValue } from './src/utils/utils';
 import app from './src/app';
 
 const port = getENVValue('PORT');

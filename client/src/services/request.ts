@@ -10,3 +10,13 @@ export const getRequest = async (path: string): Promise<AxiosResponse<any>> => {
         throw error;
     } 
 }
+
+export const postRequest = async (path: string, body: object): Promise<AxiosResponse<any>> => {
+    try {
+        const response: AxiosResponse = await axios.post(SERVER_URL + path, body);
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } 
+}

@@ -1,2 +1,6 @@
 node_modules/
 dist/
+
+/server/.ENV
+
+logs/

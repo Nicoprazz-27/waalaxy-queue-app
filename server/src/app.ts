@@ -1,13 +1,15 @@
 import express, { Application } from "express";
-import getActionsController from "./controllers/get-actions-controller";
 import cors from 'cors';
-
+import requestLoggerMiddleware from "./middlewares/request-log-middleware";
+import router from "./routes/routes";
 
 const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/actions', getActionsController);
+app.use(requestLoggerMiddleware);
+
+app.use(router);
 
 export default app;

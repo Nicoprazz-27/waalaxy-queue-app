@@ -1,91 +1,63 @@
 import './QueueOverview.css'
 import QueueList from './QueueList/QueueList'
 import ActionListAdder from './ActionListAdder/ActionListAdder'
-import Action from '../../types/action';
-import { useEffect, useRef, useState } from 'react';
-import { getRequest } from '../../services/request';
-import { EXECUTION_TIME_DELAY } from '../../utils/constants';
+import { useEffect, useState } from 'react';
+import QueueAction from '../../types/queue-action';
+import { getRequest, postRequest } from '../../services/request';
 
 function QueueOverview(): JSX.Element {
 
-  const [queueActions, setQueueActions] = useState<Action[]>([]);
-  const [actions, setActions] = useState<Action[]>([]);
-  const [creditByAction, setCreditByAction] = useState<Map<string, number>>(new Map());
-  const isTimeOutActive = useRef<boolean>(false);
-  const [activeActionId, setActiveActionId] = useState<string|null>(null);
-  
-  const addActionToQueue = (action: Action) : void => {  
-    setQueueActions( (prevQueueActions: Action[]) => [...prevQueueActions, action]);
-  }
+  const [queueActions, setQueueActions] = useState<QueueAction[]>([]);
+  const [creditByAction, setCreditByAction] = useState<{ [key: string]: number; }>({});
 
   //Trigger once
   useEffect( () => {  
-    getRequest('/actions')
+    getRequest('/queue-actions')
       .then( (res) => {
-        const actions: Action[] = res.data;
+        const queueActions: QueueAction[] = res.data;
+        setQueueActions(queueActions);
+      })
 
-        setActions(actions);
-
-        const creditByAction: Map<string, number> = new Map();
-
-        for (let index = 0; index < actions.length; index++) {
-          creditByAction.set(actions[index].id, actions[index].creditCost);
-        }
-
-        setCreditByAction(creditByAction);
-      })   
+    getRequest('/credits')
+      .then((res)=>{
+        const creditsByAction: { [key: string]: number; } = res.data;
+        setCreditByAction(creditsByAction);
+      })
+      
   }, []);
 
-  //Trigger when queueActions is edited
-  useEffect(()=>{
-    
-    //Case : We don't need to to start a timeout when a timeout is already active
-    if(isTimeOutActive.current){
-      return;
-    }
+  const addActionToQueue = (actionId: string)=>{
+    postRequest('/queue-actions', {actionId: actionId})
+      .then((res)=> {
+        const queueActions: QueueAction[] = res.data;
+        setQueueActions(queueActions);
+      })
+  }
 
-    //Check if an action could be executed
-    let indexFirstAvailableAction: number = -1;
+  useEffect( ()=>{
+    let timeOutToDeleteQueueAction :NodeJS.Timeout |null= null;
+
     for (let index = 0; index < queueActions.length; index++) {
-      if(creditByAction!.get(queueActions[index].id)! > 0 ){
-        setActiveActionId(queueActions[index].id);
-        if(indexFirstAvailableAction !== index){
-          indexFirstAvailableAction = index;
-        }
+      if(queueActions[index].expirationDateTime !== null){
+        const expirationDateTime = new Date(queueActions[index].expirationDateTime!);
+        const now = new Date();
+        const delayInSeconds = (expirationDateTime.getTime() - now.getTime()) / 1000;
+        
+        timeOutToDeleteQueueAction = setTimeout(() => {
+          setQueueActions(prevQueueActions => prevQueueActions.filter( (queueAction, i) => i !== index));
+          setCreditByAction(queueActions[index].creditByActionAfterExpiration);
+        }, delayInSeconds  * 1000);
         break;
       }
     }
 
-    //If no queueActions have credits or queueactions empty. 
-    if(indexFirstAvailableAction === -1){
-      setActiveActionId(null);
-      return;
+    return ()=> {
+      if(timeOutToDeleteQueueAction !== null){
+        clearTimeout(timeOutToDeleteQueueAction);
+      }
     }
-    
-    isTimeOutActive.current = true;
-
-    setTimeout( () => {
-
-      //Remove one credit to the action selected
-      setCreditByAction( (prevCreditByAction: Map<string,number>) => {
-        const newCreditByAction: Map<string,number> = new Map(prevCreditByAction);
-        newCreditByAction.set(queueActions[indexFirstAvailableAction].id, prevCreditByAction!.get(queueActions[indexFirstAvailableAction].id)! -1);
-        return newCreditByAction;
-      });
-
-      //Remove the action from the queueactions
-      setQueueActions( (prevQueueActions: Action[]) => {
-        const newQueueActions: Action[] = [...prevQueueActions]; 
-        newQueueActions.splice(indexFirstAvailableAction, 1);
-        return newQueueActions;
-      }); 
-
-      //Timeout is no longer active
-      isTimeOutActive.current = false;
-      
-    }, EXECUTION_TIME_DELAY * 1000);
-
   }, [queueActions]);
+
 
   return (
     <>
@@ -94,10 +66,10 @@ function QueueOverview(): JSX.Element {
       </div>
       <div className='row layout-queue-vue'>
         <div>
-          <ActionListAdder onAddActionToQueue={addActionToQueue} actions={actions} creditByAction={creditByAction}/>
+          <ActionListAdder onAddActionToQueue={addActionToQueue} creditByAction={creditByAction}/>
         </div>
         <div>
-          <QueueList actions={queueActions} activeActionId={activeActionId} />
+          <QueueList queueActions={queueActions} />
         </div>
       </div>
     </>
