@@ -1,40 +1,37 @@
-import { useState } from "react";
 import ColorStyles from "../../types/color-styles";
-import './Button.css';
+import { createUseStyles } from 'react-jss';
 
+
+const useStyles = createUseStyles({
+  button: (colorStyles: ColorStyles) =>({
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    margin: '10px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+    minWidth: '200px',
+    minHeight: '40px',
+    transition: 'background-color 0.3s',
+    backgroundColor: colorStyles.color || '',
+    '&:hover': {
+      backgroundColor: colorStyles.hoverColor || '',
+    },
+    '&:active': {
+      backgroundColor: colorStyles.onClickColor || '',
+    },
+  }),
+});
 
 function Button({text, onClick, colorStyles = {color: '', hoverColor: '', onClickColor: ''}}: {text: string, onClick: CallableFunction, colorStyles?: ColorStyles}): JSX.Element{
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  
-  const handleMouseEnter = (): void => {
-    setIsHovered(true);
-  };
-  const handleMouseLeave = (): void => {
-    setIsHovered(false);
-  };
-
-  const handleMouseUp = (): void => {   
-    setIsMouseDown(false);
-  };
-  const handleMouseDown = (): void => {
-    setIsMouseDown(true);
-  };
-
-  const buttonStyle: React.CSSProperties = {
-    backgroundColor: isMouseDown ? colorStyles.onClickColor : (isHovered ? colorStyles.hoverColor : colorStyles.color)
-  }
+  const classes = useStyles( colorStyles );
 
   return (
     <button 
-      className="button"
-      style={buttonStyle}
+      className={classes.button}
       onClick={ ()=>onClick()}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseUp={handleMouseUp}
-      onMouseDown={handleMouseDown}
     >
       {text}
     </button>

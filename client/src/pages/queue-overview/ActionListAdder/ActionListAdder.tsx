@@ -1,12 +1,24 @@
 import Action from "../../../types/action";
 import Button from '../../../components/Button/Button';
-import './ActionListAdder.css';
 import useAxios from "../../../hooks/useAxios";
+import { createUseStyles } from "react-jss";
 
+const useStyles = createUseStyles({
+  creditPrinter: {
+    border: '2px solid black',
+    borderRadius: '5px',
+    padding: '10px 16px',
+  },
+  rowButtonAction: {
+    display: 'flex',
+    alignItems: 'center'
+  }
+});
 
 function ActionListAdder( { onAddActionToQueue, creditByAction} : {onAddActionToQueue: CallableFunction, creditByAction: {[key: string]: number;}} ): JSX.Element {
 
   const { data, isLoading, error} = useAxios<Action>('/actions');
+  const classes = useStyles();
 
   const renderListActions = () : JSX.Element =>{
     if(isLoading){
@@ -23,15 +35,15 @@ function ActionListAdder( { onAddActionToQueue, creditByAction} : {onAddActionTo
 
     return (
       <>
-        {data.map((action: Action)=>{
+        {data.map((action)=>{
           return (
-            <div key={action.id} className="row-button-actions">
+            <div key={action.id} className={classes.rowButtonAction}>
               <Button 
                 text={action.title} 
                 colorStyles={action.personnalizedStyles}
                 onClick={()=>onAddActionToQueue(action.id)}
               /> 
-              <div className="credit-printer" style={{borderColor: action.personnalizedStyles.color}}>
+              <div className={classes.creditPrinter} style={{borderColor: action.personnalizedStyles.color}}>
                 {creditByAction[action.id]} c
               </div>
             </div>
